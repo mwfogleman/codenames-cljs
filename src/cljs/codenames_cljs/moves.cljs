@@ -1,6 +1,6 @@
 (ns codenames-cljs.moves
   (:require [codenames-cljs.game :as game]
-            [com.rpl.specter :refer :all]))
+            [com.rpl.specter :as S]))
 
 (defn in?
   "True if the collection contains the element."
@@ -11,20 +11,20 @@
   (= word w))
 
 (defn valid-word? [game word]
-  (let [words (select [ATOM :words ALL :word] game)]
+  (let [words (S/select [S/ATOM :words S/ALL :word] game)]
     (in? words word)))
 
 (defn revealed? [game word]
-  (select-any [ATOM :words (filterer #(word-filterer word %)) ALL :revealed?] game))
+  (S/select-any [S/ATOM :words (S/filterer #(word-filterer word %)) S/ALL :revealed?] game))
 
 (def hidden? (complement revealed?))
 
 (defn reveal! [game word]
-  (setval [ATOM :words (filterer #(word-filterer word %)) ALL :revealed?]
-          true game))
+  (S/setval [S/ATOM :words (S/filterer #(word-filterer word %)) S/ALL :revealed?]
+            true game))
 
 (defn next-round! [game]
-  (transform [ATOM :round] inc game))
+  (S/transform [S/ATOM :round] inc game))
 
 (defn opposite-team [team]
   (if (= team :red)
@@ -32,7 +32,7 @@
     :red))
 
 (defn switch-teams! [game]
-  (transform [ATOM :current-team] opposite-team game))
+  (S/transform [S/ATOM :current-team] opposite-team game))
 
 (defn next-turn! [game]
   (next-round! game)
@@ -41,18 +41,18 @@
 (defn win!
   "Makes the current team win the game."
   [game]
-  (let [winner (select-any [ATOM :current-team] game)]
-    (setval [ATOM :winning-team] winner game)))
+  (let [winner (S/select-any [S/ATOM :current-team] game)]
+    (S/setval [S/ATOM :winning-team] winner game)))
 
 (defn lose!
   "Makes the current team lose the game."
   [game]
-  (let [loser (select-any [ATOM :current-team] game)
+  (let [loser (S/select-any [S/ATOM :current-team] game)
         winner (opposite-team loser)]
-    (setval [ATOM :winning-team] winner game)))
+    (S/setval [S/ATOM :winning-team] winner game)))
 
 (defn get-freqs [game]
-  (let [words (select [ATOM :words ALL] game)
+  (let [words (S/select [S/ATOM :words S/ALL] game)
         get-attributes (juxt :identity :revealed?)]
     (->> words
          (map get-attributes)
@@ -62,15 +62,15 @@
   "If a GAME has a winner, return true. If not, return false."
   [game]
   (->> game
-       (select-any [ATOM :winning-team])
+       (S/select-any [S/ATOM :winning-team])
        (some?)))
 
 (defn- get-current-team
   [game]
-  (select-any [ATOM :current-team] game))
+  (S/select-any [S/ATOM :current-team] game))
 
 (defn- get-id-of-word [game word]
-  (select-any [ATOM :words (filterer #(word-filterer word %)) ALL :identity] game))
+  (S/select-any [S/ATOM :words (S/filterer #(word-filterer word %)) S/ALL :identity] game))
 
 (defn move! [game word]
   {:pre [(valid-word? game word)
