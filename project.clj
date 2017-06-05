@@ -1,5 +1,7 @@
 (defproject codenames-cljs "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[clj-time "0.13.0"]
+                 [com.rpl/specter "1.0.1"]
+                 [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
                  [re-frame "0.9.2"]
                  [reagent "0.6.0"]]
