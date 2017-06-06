@@ -4,7 +4,7 @@
 (defn cell [x y]
   (let [c (re-frame/subscribe [:cell x y])]
     [:button {:on-click #()}
-     "WORD"]))
+     c]))
 
 (defn grid []
   [:table

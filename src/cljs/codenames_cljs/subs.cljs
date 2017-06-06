@@ -7,8 +7,10 @@
   (= target position))
 
 (defn get-cell-word [game x y]
-  (S/select-any [S/ATOM :game :words (S/filterer #(cell-filterer [x y] %)) S/ALL :word]
-                game))
+  (S/select-any [:game S/ATOM :words (S/filterer #(cell-filterer [x y] %))S/ALL :word] game)
+  ;; (S/select-any [:game :words (S/filterer #(cell-filterer [x y] %)) S/ALL :word]
+  ;;               game)
+  )
 
 (re-frame/reg-sub
  :game
