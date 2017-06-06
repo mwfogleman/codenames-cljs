@@ -14,13 +14,17 @@
   [db]
   (S/select-any [:game S/ATOM :current-team] db))
 
+(defn get-revealed-status
+  [db]
+  (S/select-any [:game S/ATOM :revealed?] db))
+
+(defn get-view
+  [db]
+  (S/select-any [:game S/ATOM :view] db))
+
 (defn get-winner
   [db]
   (S/select-any [:game S/ATOM :winning-team] db))
-
-(re-frame/reg-sub
- :game
- :game)
 
 (re-frame/reg-sub
  :cell
@@ -28,9 +32,23 @@
    (get-cell db x y)))
 
 (re-frame/reg-sub
+ :game
+ :game)
+
+(re-frame/reg-sub
+ :revealed
+ (fn [db _]
+   (get-revealed-status db)) )
+
+(re-frame/reg-sub
  :turn
  (fn [db _]
    (get-current-team db)))
+
+(re-frame/reg-sub
+ :view
+ (fn [db _]
+   (get-view db)))
 
 (re-frame/reg-sub
  :winner

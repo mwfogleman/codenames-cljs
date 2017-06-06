@@ -11,7 +11,8 @@
         keywordizer (fn [team] (-> team (name) (str "-remaining") (keyword)))
         remaining-map (hash-map (keywordizer fst) 9 (keywordizer snd) 8)
         m (merge remaining-map {:starting-team fst
-                                :current-team fst})]
+                                :current-team fst
+                                :view :player})]
     (cons m (reduce concat [(repeat 9 fst)
                             (repeat 8 snd)
                             (repeat 7 :neutral)

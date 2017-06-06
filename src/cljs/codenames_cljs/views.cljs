@@ -13,17 +13,21 @@
               word]))
 
 (defn cell [x y]
-  (let [c (deref (re-frame/subscribe [:cell x y]))
-        winner (re-frame/subscribe [:winner])
-        word (:word c) ;; probably need more subscribes here
-        identity (:identity c)
-        revealed (:revealed? c)]
+  (let [c               (deref (re-frame/subscribe [:cell x y]))
+        winner          (re-frame/subscribe [:winner])
+        view            (re-frame/subscribe [:view])
+        revealed-status (re-frame/subscribe [:revealed])
+        word            (:word c) ;; probably need more subscribes here
+        identity        (:identity c)]
     (fn []
       (if @winner
         [:span
          [colorize word identity]]
-        [:button {:on-click #(re-frame/dispatch [:move word])}
-         [colorize word identity]]))))
+        (if (true? @revealed-status)
+          [:span
+           [colorize word identity]]  
+          [:button {:on-click #(re-frame/dispatch [:move word])}
+           [colorize word identity]])))))
 
 (defn grid []
   [:table
@@ -33,8 +37,8 @@
         [:td [cell x y]])])])
 
 (defn main-panel []
-  (let [game (re-frame/subscribe [:game])
-        turn (re-frame/subscribe [:turn])
+  (let [game   (re-frame/subscribe [:game])
+        turn   (re-frame/subscribe [:turn])
         winner (re-frame/subscribe [:winner])]
     (fn []
       [:div
