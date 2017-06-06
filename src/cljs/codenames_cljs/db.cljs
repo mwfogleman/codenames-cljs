@@ -2,6 +2,4 @@
   (:require [codenames-cljs.game :as game]))
 
 (def default-db
-  {:board {}
-   ;; :turn :x
-   :game (game/prepare-game)})
+  {:game (game/prepare-game)})

@@ -2,9 +2,10 @@
   (:require [re-frame.core :as re-frame]))
 
 (defn cell [x y]
-  (let [c (re-frame/subscribe [:cell x y])]
-    [:button {:on-click #()}
-     c]))
+  (let [c (deref (re-frame/subscribe [:cell x y]))
+        word (:word c)]
+    [:button {:on-click #(re-frame/dispatch [:move word])}
+     word]))
 
 (defn grid []
   [:table

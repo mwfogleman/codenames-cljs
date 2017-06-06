@@ -6,11 +6,8 @@
 (defn cell-filterer [[x y :as target] {:keys [position]}]
   (= target position))
 
-(defn get-cell-word [game x y]
-  (S/select-any [:game S/ATOM :words (S/filterer #(cell-filterer [x y] %))S/ALL :word] game)
-  ;; (S/select-any [:game :words (S/filterer #(cell-filterer [x y] %)) S/ALL :word]
-  ;;               game)
-  )
+(defn get-cell [game x y]
+  (S/select-any [:game S/ATOM :words (S/filterer #(cell-filterer [x y] %)) S/ALL] game))
 
 (re-frame/reg-sub
  :game
@@ -19,4 +16,4 @@
 (re-frame/reg-sub
  :cell
  (fn [db [_ x y]]
-   [:span (str (get-cell-word db x y))]))
+   (get-cell db x y)))
