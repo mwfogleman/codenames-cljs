@@ -3,9 +3,14 @@
 
 (defn cell [x y]
   (let [c (deref (re-frame/subscribe [:cell x y]))
+        winner (re-frame/subscribe [:winner])
         word (:word c)]
-    [:button {:on-click #(re-frame/dispatch [:move word])}
-     word]))
+    (fn []
+      (if @winner
+        [:span
+         word]
+        [:button {:on-click #(re-frame/dispatch [:move word])}
+         word]))))
 
 (defn grid []
   [:table
@@ -16,13 +21,18 @@
 
 (defn main-panel []
   (let [game (re-frame/subscribe [:game])
-        turn (re-frame/subscribe [:turn])]
+        turn (re-frame/subscribe [:turn])
+        winner (re-frame/subscribe [:winner])]
     (fn []
       [:div
-       [:p
-        (str "It's " (name @turn) "'s turn!")]
+       (if @winner
+         [:div
+          (clojure.string/capitalize (name @winner)) " is the winner."]
+         [:div
+          "It's " (name @turn) "'s turn."]) 
        [:center
-        [grid]
+        [:p
+         [grid]]
         [:p
          [:button {:on-click #(re-frame/dispatch [:initialize-db])}
           "RESET"]]]

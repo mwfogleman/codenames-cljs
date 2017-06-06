@@ -2,17 +2,21 @@
   (:require [com.rpl.specter :as S]
             [re-frame.core :as re-frame]))
 
-(defn cell-filterer [[x y :as target] {:keys [position]}]
+(defn cell-filterer
+  [[x y :as target] {:keys [position]}]
   (= target position))
 
-(defn get-cell [db x y]
+(defn get-cell
+  [db x y]
   (S/select-any [:game S/ATOM :words (S/filterer #(cell-filterer [x y] %)) S/ALL] db))
 
 (defn get-current-team
   [db]
   (S/select-any [:game S/ATOM :current-team] db))
 
-(defn get-winner [])
+(defn get-winner
+  [db]
+  (S/select-any [:game S/ATOM :winning-team] db))
 
 (re-frame/reg-sub
  :game
@@ -30,4 +34,5 @@
 
 (re-frame/reg-sub
  :winner
- :winner)
+ (fn [db _]
+   (get-winner db)))
