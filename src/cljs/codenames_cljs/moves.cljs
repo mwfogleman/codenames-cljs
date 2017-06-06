@@ -65,7 +65,7 @@
        (S/select-any [S/ATOM :winning-team])
        (some?)))
 
-(defn- get-current-team
+(defn get-current-team
   [game]
   (S/select-any [S/ATOM :current-team] game))
 

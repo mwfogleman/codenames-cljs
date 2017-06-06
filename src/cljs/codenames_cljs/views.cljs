@@ -15,9 +15,12 @@
         [:td [cell x y]])])])
 
 (defn main-panel []
-  (let [game (re-frame/subscribe [:game])]
+  (let [game (re-frame/subscribe [:game])
+        turn (re-frame/subscribe [:turn])]
     (fn []
       [:div
+       [:p
+        (str "It's " (name @turn) "'s turn!")]
        [:center
         [grid]
         [:p
