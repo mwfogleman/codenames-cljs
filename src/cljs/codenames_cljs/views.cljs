@@ -24,9 +24,12 @@
         [:span
          [colorize word identity]]
         (if (true? @revealed-status)
-          [:span
+          [:span {:style {:width 30
+                          :height 30}}
            [colorize word identity]]  
-          [:button {:on-click #(re-frame/dispatch [:move word])}
+          [:button {:on-click #(re-frame/dispatch [:move word])
+                    :style {:width 100
+                            :height 100}}
            [colorize word identity]])))))
 
 (defn grid []
@@ -34,7 +37,10 @@
    (for [y (range 5)]
      [:tr
       (for [x (range 5)]
-        [:td [cell x y]])])])
+        [:td {:style {:width 100
+                      :height 100
+                      :text-align :center}}
+         [cell x y]])])])
 
 (defn main-panel []
   (let [game   (re-frame/subscribe [:game])
