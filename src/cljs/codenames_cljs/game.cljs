@@ -1,6 +1,7 @@
 (ns codenames-cljs.game
   (:require [codenames-cljs.dictionaries :as dictionaries]
-            [cljs-time.core :as t]))
+            [cljs-time.core :as t]
+            [reagent.core :as r]))
 
 (def teams [:red :blue])
 
@@ -45,4 +46,4 @@
          (map mapper)
          (hash-map :words)
          (merge metadata)
-         (atom))))
+         (r/atom))))
